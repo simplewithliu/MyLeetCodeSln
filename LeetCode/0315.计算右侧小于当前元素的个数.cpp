@@ -4,8 +4,8 @@
 
 315. 计算右侧小于当前元素的个数
 
-给你一个整数数组 nums，按要求返回一个新数组 counts
-数组 counts 有该性质： counts[i] 的值是  nums[i] 右侧小于 nums[i] 的元素的数量。
+给你一个整数数组 nums ，按要求返回一个新数组 counts
+数组 counts 有该性质： counts[i] 的值是  nums[i] 右侧小于 nums[i] 的元素的数量
 
 示例 1：
 输入：nums = [5,2,6,1]
@@ -31,46 +31,17 @@
 */
 
 // 构造索引数组归并排序
-class Solution1 {
+class Solution {
 public:
 	vector<int> countSmaller(vector<int> &nums) {
 		int len = nums.size();
-		vector<int> count(len);
 		// 构造一个专用于归并的数组indexes，该数组中存放的是原数组的索引
 		// 可以理解为当作哈希表中的key，根据值大小对key进行排序
 		vector<int> indexes(len);
+		vector<int> count(len);
 		for (int i = 0; i < len; ++i) indexes[i] = i;
 		mergeSort(indexes, 0, len - 1, count, nums);
 		return count;
-	}
-
-private:
-	void merge(vector<int> &indexes, int lo, int hi, int mi, vector<int> &count,
-		vector<int> &nums) {
-		int leftLen = mi - lo + 1;
-		vector<int> ltemp(leftLen);
-		for (int idx1 = 0, idx2 = lo; idx1 < leftLen; ++idx1, ++idx2) {
-			ltemp[idx1] = indexes[idx2];
-		}
-		int i = 0, j = mi + 1, k = lo;
-		while (i < leftLen && j <= hi) {
-			if (nums[ltemp[i]] <= nums[indexes[j]]) {
-				indexes[k] = ltemp[i];
-				count[indexes[k]] += j - mi - 1;
-				++k, ++i;
-			}
-			else {
-				indexes[k++] = indexes[j++];
-			}
-		}
-		while (i < leftLen) {
-			indexes[k] = ltemp[i];
-			count[indexes[k]] += j - mi - 1;
-			++k, ++i;
-		}
-		while (j <= hi) {
-			indexes[k++] = indexes[j++];
-		}
 	}
 	void mergeSort(vector<int> &indexes, int lo, int hi, vector<int> &count,
 		vector<int> &nums) {
@@ -81,8 +52,18 @@ private:
 		if (nums[indexes[mi]] <= nums[indexes[mi + 1]]) return;
 		merge(indexes, lo, hi, mi, count, nums);
 	}
+	void merge(vector<int> &indexes, int lo, int hi, int mi, vector<int> &count,
+		vector<int> &nums) {
+		int j = mi + 1;
+		for (int i = lo; i <= mi; ++i) {
+			while (j <= hi && nums[indexes[i]] > nums[indexes[j]]) ++j;
+			count[indexes[i]] += j - (mi + 1);
+		}
+		inplace_merge(indexes.begin() + lo, indexes.begin() + mi + 1,
+			indexes.begin() + hi + 1,
+			[&](int a, int b) { return nums[a] < nums[b]; });
+	}
 };
-
 // https://leetcode.cn/problems/count-of-smaller-numbers-after-self/solutions/9082/gui-bing-pai-xu-suo-yin-shu-zu-python-dai-ma-java-/
 // @author https://leetcode.cn/u/liweiwei1419/
 
@@ -96,7 +77,7 @@ struct Node {
 	Node() : left(nullptr), right(nullptr), val(0), add(0) {}
 };
 
-class Solution2 {
+class Solution1 {
 public:
 	vector<int> countSmaller(vector<int> &nums) {
 		int len = nums.size();
@@ -159,7 +140,7 @@ private:
 
 
 // 构造线段树，单点更新
-class Solution3 {
+class Solution2 {
 public:
 	void update(Node *node, int start, int end, int idx, int val) {
 		if (start == end) {

@@ -1119,5 +1119,11 @@
     <ClCompile Include="2426.满足不等式的数对数目.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="2642.设计可以求最短路径的图类.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="0493.翻转对.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

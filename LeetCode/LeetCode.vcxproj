@@ -337,6 +337,7 @@
     <ClCompile Include="0480.滑动窗口中位数.cpp" />
     <ClCompile Include="0483.最小好进制.cpp" />
     <ClCompile Include="0488.祖玛游戏.cpp" />
+    <ClCompile Include="0493.翻转对.cpp" />
     <ClCompile Include="0494.目标和.cpp" />
     <ClCompile Include="0502.IPO.cpp" />
     <ClCompile Include="0514.自由之路.cpp" />
@@ -380,6 +381,7 @@
     <ClCompile Include="2558.从数量最多的堆取走礼物.cpp" />
     <ClCompile Include="0382.链表随机节点.cpp" />
     <ClCompile Include="2426.满足不等式的数对数目.cpp" />
+    <ClCompile Include="2642.设计可以求最短路径的图类.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
