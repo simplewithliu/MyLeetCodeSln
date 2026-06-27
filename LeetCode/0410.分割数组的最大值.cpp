@@ -4,34 +4,35 @@
 
 410. 分割数组的最大值
 
-给定一个非负整数数组 nums 和一个整数 m, 你需要将这个数组分成 m 个非空的连续子数组
-设计一个算法使得这 m 个子数组各自和的最大值最小
+给定一个非负整数数组 nums 和一个整数 k ，你需要将这个数组分成 k 个非空的连续子数组，使得这 k 个子数组各自和的最大值 最小。
+返回分割后最小的和的最大值。
+子数组 是数组中连续的部分。
 
 示例 1：
-输入：nums = [7,2,5,10,8], m = 2
+输入：nums = [7,2,5,10,8], k = 2
 输出：18
 解释：
-一共有四种方法将 nums 分割为 2 个子数组
-其中最好的方式是将其分为 [7,2,5] 和 [10,8]
-因为此时这两个子数组各自的和的最大值为18，在所有情况中最小
+一共有四种方法将 nums 分割为 2 个子数组。
+其中最好的方式是将其分为 [7,2,5] 和 [10,8] 。
+因为此时这两个子数组各自的和的最大值为18，在所有情况中最小。
 
 示例 2：
-输入：nums = [1,2,3,4,5], m = 2
+输入：nums = [1,2,3,4,5], k = 2
 输出：9
 
 示例 3：
-输入：nums = [1,4,4], m = 3
+输入：nums = [1,4,4], k = 3
 输出：4
 
 提示：
 1 <= nums.length <= 1000
 0 <= nums[i] <= 10^6
-1 <= m <= min(50, nums.length)
+1 <= k <= min(50, nums.length)
 
 */
 
 // 备忘录
-class Solution1 {
+class Solution {
 public:
 	int splitArray(vector<int> &nums, int k) {
 		int len = nums.size();
@@ -63,7 +64,7 @@ private:
 
 
 // 动态规划
-class Solution2 {
+class Solution1 {
 public:
 	int splitArray(vector<int> &nums, int k) {
 		int len = nums.size();
@@ -90,37 +91,33 @@ public:
 
 
 // 二分查找
-class Solution3 {
+class Solution2 {
 public:
 	int splitArray(vector<int> &nums, int k) {
-		int maxNum = INT_MIN, sum = 0;
-		for (const auto &num : nums) {
-			maxNum = max(maxNum, num);
-			sum += num;
-		}
-		int lo = maxNum, hi = sum;
+		int lo = *max_element(nums.begin(), nums.end());
+		int hi = accumulate(nums.begin(), nums.end(), 0);
 		while (lo < hi) {
 			int mi = lo + (hi - lo) / 2;
-			int splits = split(nums, mi);
-			splits > k ? lo = mi + 1 : hi = mi;
+			check(mi, nums, k) ? hi = mi : lo = mi + 1;
 		}
 		return lo;
 	}
-
-private:
-	int split(vector<int> &nums, int tarInterSum) {
-		int splits = 1;
-		int curInterSum = 0;
-		for (const auto &num : nums) {
-			if (curInterSum + num > tarInterSum) {
-				curInterSum = 0;
-				++splits;
+	bool check(int tar, vector<int> &nums, int k) {
+		int cnt = 1, s = 0;
+		for (int n : nums) {
+			if (s + n <= tar) {
+				s += n;
+				continue;
 			}
-			curInterSum += num;
+			if (cnt == k) return false;
+			++cnt;
+			s = n;
 		}
-		return splits;
+		return true;
 	}
 };
+// https://leetcode.cn/problems/split-array-largest-sum/solutions/2613046/er-fen-da-an-fu-ti-dan-pythonjavacgojsru-n5la/
+// @author https://leetcode.cn/u/endlesscheng/
 // https://leetcode.cn/problems/split-array-largest-sum/solutions/242909/er-fen-cha-zhao-by-liweiwei1419-4/
 // @authors https://leetcode.cn/u/liweiwei1419/
 
